@@ -2,6 +2,7 @@ package api;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import model.Specimen;
 import model.Student;
 
 import java.io.BufferedReader;
@@ -13,10 +14,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.*;
+import java.util.List;
 
-public class StudentApi {
-    String urlAddress = "http://localhost:8080/students";
+public class SpecimenApi {
+    String urlAddress = "http://localhost:8080/specimens";
     URL url;
     HttpURLConnection connection;
     DataOutputStream outputStream = null;
@@ -25,16 +26,14 @@ public class StudentApi {
 
     Gson g = new Gson();
 
-    public Student addStudent(String name, String surname, String patronymic, String login, String password, String workplace, String mark) {
+    public Specimen addSpecimen(String texture, String structure, String composition, String area, String paleo) {
         try {
-            Student student = new Student();
-            student.setName(name);
-            student.setSurname(surname);
-            student.setPatronymic(patronymic);
-            student.setLogin(login);
-            student.setPassword(password);
-            student.setWorkplace(workplace);
-            student.setMark(mark);
+            Specimen specimen = new Specimen();
+            specimen.setTexture(texture);
+            specimen.setStructure(structure);
+            specimen.setComposition(composition);
+            specimen.setArea(area);
+            specimen.setPaleo(paleo);
             url = new URL(urlAddress);
 
             connection = (HttpURLConnection) url.openConnection();
@@ -49,7 +48,7 @@ public class StudentApi {
 
             try {
                 outputStream = new DataOutputStream(connection.getOutputStream());
-                outputStream.writeChars(g.toJson(student));
+                outputStream.writeChars(g.toJson(specimen));
                 outputStream.flush();
                 outputStream.close();
             } catch (Exception e) {
@@ -62,7 +61,7 @@ public class StudentApi {
                 while ((inputLine = in.readLine()) != null) {
                     content.append(inputLine);
                 }
-                Student read = g.fromJson(String.valueOf(content), Student.class);
+                Specimen read = g.fromJson(String.valueOf(content), Specimen.class);
                 return read;
 
             }
@@ -81,7 +80,7 @@ public class StudentApi {
 
     }
 
-    public List<Student> getAllStudents() {
+    public List<Specimen> getAllSpecimens() {
         try {
             String urlAddressLocal;
             urlAddressLocal = urlAddress + "/all";
@@ -99,8 +98,8 @@ public class StudentApi {
                     content.append(inputLine);
                 }
 
-                Type type = new TypeToken<List<Student>>(){}.getType();
-                List<Student> read = g.fromJson(String.valueOf(content), type);
+                Type type = new TypeToken<List<Specimen>>(){}.getType();
+                List<Specimen> read = g.fromJson(String.valueOf(content), type);
 
 
                 return read;
@@ -112,7 +111,7 @@ public class StudentApi {
 
     }
 
-    public Student delStudent(Long id) {
+    public Specimen delpecimen(Long id) {
         try {
             String urlAddressLocal;
             urlAddressLocal = urlAddress + "/" + id.toString();
@@ -130,7 +129,7 @@ public class StudentApi {
                     content.append(inputLine);
                 }
 
-                Student read = g.fromJson(String.valueOf(content), Student.class);
+                Specimen read = g.fromJson(String.valueOf(content), Specimen.class);
 
                 return read;
             }
@@ -146,16 +145,14 @@ public class StudentApi {
         }
     }
 
-    public Student updateStudent(Long id, String name, String surname, String patronymic, String login, String password, String workplace, String mark) {
+    public Specimen updateSpecimen(Long id, String texture, String structure, String composition, String area, String paleo) {
         try {
-            Student student = new Student();
-            student.setName(name);
-            student.setSurname(surname);
-            student.setPatronymic(patronymic);
-            student.setLogin(login);
-            student.setPassword(password);
-            student.setWorkplace(workplace);
-            student.setMark(mark);
+            Specimen specimen = new Specimen();
+            specimen.setTexture(texture);
+            specimen.setStructure(structure);
+            specimen.setComposition(composition);
+            specimen.setArea(area);
+            specimen.setPaleo(paleo);
             String urlAddressLocal = urlAddress + "?id=" + id.toString();
 
             url = new URL(urlAddressLocal);
@@ -172,7 +169,7 @@ public class StudentApi {
 
             try {
                 outputStream = new DataOutputStream(connection.getOutputStream());
-                outputStream.writeChars(g.toJson(student));
+                outputStream.writeChars(g.toJson(specimen));
                 outputStream.flush();
                 outputStream.close();
             } catch (Exception e) {
@@ -186,7 +183,7 @@ public class StudentApi {
                     content.append(inputLine);
                 }
 
-                Student read = g.fromJson(String.valueOf(content), Student.class);
+                Specimen read = g.fromJson(String.valueOf(content), Specimen.class);
 
                 return read;
 
@@ -199,5 +196,4 @@ public class StudentApi {
             throw new RuntimeException(e);
         }
     }
-
 }

@@ -1,17 +1,22 @@
 package model;
 
-public class Student {
-
+public class Teacher {
     private Long id;
     private String name;
     private String surname;
     private String patronymic;
     private String login;
     private String password;
-    private String workplace;
-    private String mark;
 
-    public Student() {
+    public Teacher() {
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -52,29 +57,5 @@ public class Student {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getWorkplace() {
-        return workplace;
-    }
-
-    public void setWorkplace(String workplace) {
-        this.workplace = workplace;
-    }
-
-    public String getMark() {
-        return mark;
-    }
-
-    public void setMark(String mark) {
-        this.mark = mark;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

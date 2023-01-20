@@ -3,6 +3,7 @@ package api;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import model.Student;
+import model.Teacher;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -13,10 +14,10 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.util.*;
+import java.util.List;
 
-public class StudentApi {
-    String urlAddress = "http://localhost:8080/students";
+public class TeacherApi {
+    String urlAddress = "http://localhost:8080/teachers";
     URL url;
     HttpURLConnection connection;
     DataOutputStream outputStream = null;
@@ -25,16 +26,14 @@ public class StudentApi {
 
     Gson g = new Gson();
 
-    public Student addStudent(String name, String surname, String patronymic, String login, String password, String workplace, String mark) {
+    public Teacher addTeacher(String name, String surname, String patronymic, String login, String password, String workplace, String mark) {
         try {
-            Student student = new Student();
-            student.setName(name);
-            student.setSurname(surname);
-            student.setPatronymic(patronymic);
-            student.setLogin(login);
-            student.setPassword(password);
-            student.setWorkplace(workplace);
-            student.setMark(mark);
+            Teacher teacher = new Teacher();
+            teacher.setName(name);
+            teacher.setSurname(surname);
+            teacher.setPatronymic(patronymic);
+            teacher.setLogin(login);
+            teacher.setPassword(password);
             url = new URL(urlAddress);
 
             connection = (HttpURLConnection) url.openConnection();
@@ -49,7 +48,7 @@ public class StudentApi {
 
             try {
                 outputStream = new DataOutputStream(connection.getOutputStream());
-                outputStream.writeChars(g.toJson(student));
+                outputStream.writeChars(g.toJson(teacher));
                 outputStream.flush();
                 outputStream.close();
             } catch (Exception e) {
@@ -62,26 +61,18 @@ public class StudentApi {
                 while ((inputLine = in.readLine()) != null) {
                     content.append(inputLine);
                 }
-                Student read = g.fromJson(String.valueOf(content), Student.class);
-                return read;
+                Teacher read = g.fromJson(String.valueOf(content), Teacher.class);
 
+                return read;
             }
         } catch (MalformedURLException e) {
             throw new RuntimeException(e);
         } catch (IOException e) {
             throw new RuntimeException(e);
-        } finally {
-            try {
-                outputStream.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
         }
-
-
     }
 
-    public List<Student> getAllStudents() {
+    public List<Teacher> getAllTeachers() {
         try {
             String urlAddressLocal;
             urlAddressLocal = urlAddress + "/all";
@@ -92,6 +83,7 @@ public class StudentApi {
             connection.setConnectTimeout(1000);
             connection.setReadTimeout(1000);
 
+
             try (final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()))){
                 String inputLine;
                 final StringBuilder content = new StringBuilder();
@@ -99,8 +91,8 @@ public class StudentApi {
                     content.append(inputLine);
                 }
 
-                Type type = new TypeToken<List<Student>>(){}.getType();
-                List<Student> read = g.fromJson(String.valueOf(content), type);
+                Type type = new TypeToken<List<Teacher>>(){}.getType();
+                List<Teacher> read = g.fromJson(String.valueOf(content), type);
 
 
                 return read;
@@ -109,10 +101,9 @@ public class StudentApi {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
-    public Student delStudent(Long id) {
+    public Teacher delTeacher(Long id) {
         try {
             String urlAddressLocal;
             urlAddressLocal = urlAddress + "/" + id.toString();
@@ -130,7 +121,7 @@ public class StudentApi {
                     content.append(inputLine);
                 }
 
-                Student read = g.fromJson(String.valueOf(content), Student.class);
+                Teacher read = g.fromJson(String.valueOf(content), Teacher.class);
 
                 return read;
             }
@@ -146,16 +137,14 @@ public class StudentApi {
         }
     }
 
-    public Student updateStudent(Long id, String name, String surname, String patronymic, String login, String password, String workplace, String mark) {
+    public Teacher updateTeacher(Long id, String name, String surname, String patronymic, String login, String password) {
         try {
-            Student student = new Student();
-            student.setName(name);
-            student.setSurname(surname);
-            student.setPatronymic(patronymic);
-            student.setLogin(login);
-            student.setPassword(password);
-            student.setWorkplace(workplace);
-            student.setMark(mark);
+            Teacher teacher = new Teacher();
+            teacher.setName(name);
+            teacher.setSurname(surname);
+            teacher.setPatronymic(patronymic);
+            teacher.setLogin(login);
+            teacher.setPassword(password);
             String urlAddressLocal = urlAddress + "?id=" + id.toString();
 
             url = new URL(urlAddressLocal);
@@ -172,7 +161,7 @@ public class StudentApi {
 
             try {
                 outputStream = new DataOutputStream(connection.getOutputStream());
-                outputStream.writeChars(g.toJson(student));
+                outputStream.writeChars(g.toJson(teacher));
                 outputStream.flush();
                 outputStream.close();
             } catch (Exception e) {
@@ -186,7 +175,7 @@ public class StudentApi {
                     content.append(inputLine);
                 }
 
-                Student read = g.fromJson(String.valueOf(content), Student.class);
+                Teacher read = g.fromJson(String.valueOf(content), Teacher.class);
 
                 return read;
 
@@ -199,5 +188,7 @@ public class StudentApi {
             throw new RuntimeException(e);
         }
     }
+
+
 
 }
